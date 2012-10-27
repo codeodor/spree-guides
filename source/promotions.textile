@@ -105,7 +105,27 @@ The default available actions are:
 * **Create adjustment** - creates an adjustment against the order using a calculator (including flat rate per order / item, free shipping, etc).
 * **Create line items** - will add specific products or variants to the order.
 
-It is easy to add new action types by defining a subclass of *PromotionAction* which implements the *perform* method. Call *register* on your subclass to make it available to choose in the admin interface. See "Promotion::Actions::CreateAdjustment":https://github.com/spree/spree/blob/1-0-stable/promo/app/models/spree/promotion/actions/create_adjustment.rb for an example.
+h3. Custom Promotion Actions
+
+It is easy to add new action types by defining a subclass of @Spree::PromotionAction@ which implements the @perform@ method. 
+
+To make it available to choose in the admin interface, register your subclass by:
+
+1. Adding it to the @Rails.application.config.spree.promotions.actions@ array. For example: 
+
+bc. unless Rails.application.config.spree.promotions.actions.include?(MyPromotionAction)
+  Rails.application.config.spree.promotions.actions << MyPromotionAction 
+end
+
+2. Add it's name and description under a new key in your locales @[language].yml@ files. For example, for English, you'd have the following in locales/en.yml:
+
+bc. en:
+  promotion_action_types:
+    my_promotion_action:
+      name: My Promotion Action
+      description: Performs my promotion action.
+
+See "Promotion::Actions::CreateAdjustment":https://github.com/spree/spree/blob/1-0-stable/promo/app/models/spree/promotion/actions/create_adjustment.rb for an example implementation of a promotion action.
 
 h3. Promotion adjustments
 
